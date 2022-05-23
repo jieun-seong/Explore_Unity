@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool lockCursor = true;
 
     [SerializeField] float walkSpeed = 3.0f;
+    [SerializeField] float jumpSpeed = 4.0f;
     [SerializeField] float gravity = -13.0f;
 
     [SerializeField] [Range(0.0f, 0.5f)] float moveSmoothTime = 0.01f;
@@ -64,14 +65,18 @@ public class PlayerController : MonoBehaviour
             speedMultiplier = 2.0f;
         }
 
-        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        targetDir.Normalize();
-        currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
-
         if (controller.isGrounded)
         {
             velocityY = 0.0f;
+            if (Input.GetKey("space"))
+            {
+                velocityY = jumpSpeed;
+            }
         }
+
+        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        targetDir.Normalize();
+        currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
 
         velocityY += gravity * Time.deltaTime;
 
